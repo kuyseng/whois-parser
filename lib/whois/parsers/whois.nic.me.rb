@@ -16,13 +16,18 @@ module Whois
     # Parser for the whois.nic.me server.
     class WhoisNicMe < BaseAfilias
 
+      self.scanner = Scanners::BaseAfilias, {
+        # Disclaimer starts with "Access to" in .me servers
+        pattern_disclaimer: /^Access to/
+      }
+
       property_supported :status do
         Array.wrap(node("Domain Status"))
       end
 
 
       property_supported :created_on do
-        node("Domain Create Date") do |value|
+        node("Creation Date") do |value|
           parse_time(value)
         end
       end
@@ -34,14 +39,14 @@ module Whois
       end
 
       property_supported :expires_on do
-        node("Domain Expiration Date") do |value|
+        node("Registry Expiry Date") do |value|
           parse_time(value)
         end
       end
 
 
       property_supported :nameservers do
-        Array.wrap(node("Nameservers")).reject(&:empty?).map do |name|
+        Array.wrap(node("Name Server")).reject(&:empty?).map do |name|
           Parser::Nameserver.new(name: name.downcase)
         end
       end
