@@ -15,6 +15,21 @@ module Whois
 
     # Parser for the whois.nic.ag server.
     class WhoisNicAg < BaseAfilias
+      self.scanner = Scanners::BaseAfilias, {
+        pattern_disclaimer: /^Access to/
+      }
+
+      property_supported :updated_on do
+        node("Updated Date") do |value|
+          parse_time(value)
+        end
+      end
+
+      property_supported :expires_on do
+        node("Registry Expiry Date") do |value|
+          parse_time(value)
+        end
+      end
     end
 
   end
