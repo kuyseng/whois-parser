@@ -21,9 +21,10 @@ module Whois
     class WhoisNicAsia < BaseAfilias
 
       self.scanner = Scanners::BaseAfilias, {
-          pattern_reserved: /^Reserved by DotAsia\n/,
+          pattern_disclaimer: /^Access to/,
+          pattern_reserved: /^The domain, (.+), is an ICANN Reserved Name and is not available for registration\./,
+          pattern_available: /^NOT FOUND/
       }
-
 
       property_supported :status do
         if reserved?
@@ -34,20 +35,20 @@ module Whois
       end
 
 
-      property_supported :created_on do
-        node("Domain Create Date") do |value|
+      def created_on
+        node("Creation Date") do |value|
           parse_time(value)
         end
       end
 
       property_supported :updated_on do
-        node("Domain Last Updated Date") do |value|
+        node("Updated Date") do |value|
           parse_time(value)
         end
       end
 
       property_supported :expires_on do
-        node("Domain Expiration Date") do |value|
+        node("Registry Expiry Date") do |value|
           parse_time(value)
         end
       end
@@ -63,7 +64,7 @@ module Whois
 
 
       property_supported :nameservers do
-        Array.wrap(node("Nameservers")).reject(&:empty?).map do |name|
+        Array.wrap(node("Name Server")).reject(&:empty?).map do |name|
           Parser::Nameserver.new(:name => name.downcase)
         end
       end
