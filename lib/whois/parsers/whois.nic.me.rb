@@ -33,7 +33,7 @@ module Whois
       end
 
       property_supported :updated_on do
-        node("Domain Last Updated Date") do |value|
+        node("Updated Date") do |value|
           parse_time(value)
         end
       end
