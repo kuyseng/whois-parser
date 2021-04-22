@@ -7,7 +7,7 @@
 #++
 
 
-require_relative 'base_shared3'
+require_relative 'base_afilias2'
 
 
 module Whois
@@ -18,12 +18,11 @@ module Whois
     # @see Whois::Parsers::Example
     #   The Example parser for the list of all available methods.
     #
-    class WhoisNicGd < BaseShared3
+    class WhoisNicGd < BaseAfilias2
 
-      # NEWPROPERTY
-      def reserved?
-        !!content_for_scanner.match(/RESTRICTED/)
-      end
+      self.scanner = Scanners::BaseAfilias, {
+        pattern_disclaimer: /^The Whois and|^Access to /,
+      }
 
     end
 
