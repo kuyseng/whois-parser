@@ -7,7 +7,7 @@
 #++
 
 
-require_relative 'base_whoisd'
+require_relative 'base_afilias2'
 
 
 module Whois
@@ -18,22 +18,28 @@ module Whois
     # @see Whois::Parsers::Example
     #   The Example parser for the list of all available methods.
     #
-    class WhoisNicFo < BaseWhoisd
+    class WhoisNicFo < BaseAfilias2
 
-      property_not_supported :registrar
+      self.scanner = Scanners::BaseAfilias, {
+          pattern_disclaimer: /^The Whois and|^Access to/,
+          pattern_reserved: /^Reserved by ICM Registry\n/,
+      }
 
-      # whois.nic.fo is using an old whoisd version.
-      property_supported :technical_contacts do
-        node('tech-c') do |value|
-          build_contact(value, Parser::Contact::TYPE_TECHNICAL)
+      property_supported :created_on do
+        node("Creation Date") do |value|
+          parse_time(value)
         end
       end
 
+      property_supported :updated_on do
+        node("Updated Date") do |value|
+          parse_time(value)
+        end
+      end
 
-      # whois.nic.fo is using an old whoisd version.
-      property_supported :nameservers do
-        Array.wrap(node('nserver')).map do |line|
-          Parser::Nameserver.new(:name => line.strip)
+      property_supported :expires_on do
+        node("Registry Expiry Date") do |value|
+          parse_time(value)
         end
       end
 
