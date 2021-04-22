@@ -15,6 +15,27 @@ module Whois
 
     # Parser for the whois.afilias-grs.info server.
     class WhoisAfiliasGrsInfo < BaseAfilias
+      self.scanner = Scanners::BaseAfilias, {
+        pattern_disclaimer: /^Access to/,
+      }
+
+      property_supported :created_on do
+        node("Creation Date") do |value|
+          parse_time(value)
+        end
+      end
+
+      property_supported :updated_on do
+        node("Updated Date") do |value|
+          parse_time(value)
+        end
+      end
+
+      property_supported :expires_on do
+        node("Registry Expiry Date") do |value|
+          parse_time(value)
+        end
+      end
     end
 
   end
