@@ -31,7 +31,7 @@ module Whois
 
 
       property_supported :updated_on do
-        node("Update Date") do |value|
+        node("Updated Date") do |value|
           parse_time(value)
         end
       end
