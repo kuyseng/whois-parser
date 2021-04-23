@@ -18,7 +18,7 @@ module Whois
 
       self.scanner = Scanners::BaseAfilias, {
           pattern_disclaimer: /^The WHOIS information|^The data in this record|^This service is|^Uniregistry reserves/,
-          pattern_reserved: /^Reserved by ICM Registry\n/,
+          pattern_reserved: /^>>> Registry Reserved/,
       }
 
       property_supported :created_on do
