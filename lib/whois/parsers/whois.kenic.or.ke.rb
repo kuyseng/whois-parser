@@ -51,19 +51,19 @@ module Whois
 
 
       property_supported :created_on do
-        if content_for_scanner =~ /Created:\s+(.+?)\n/
+        if content_for_scanner =~ /Creation Date:\s+(.+?)\n/
           parse_time($1)
         end
       end
 
       property_supported :updated_on do
-        if content_for_scanner =~ /Modified:\s+(.+?)\n/
+        if content_for_scanner =~ /Updated Date:\s+(.+?)\n/
           parse_time($1)
         end
       end
 
       property_supported :expires_on do
-        if content_for_scanner =~ /Expires:\s+(.+?)\n/
+        if content_for_scanner =~ /Registry Expiry Date:\s+(.+?)\n/
           parse_time($1)
         end
       end
